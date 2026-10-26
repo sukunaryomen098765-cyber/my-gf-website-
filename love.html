@@ -1,0 +1,334 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You, My Love ❤️</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  overflow-x: hidden;
+  background: radial-gradient(ellipse at top, #421b42, #130c20 65%, #070710);
+  color: white;
+  font-family: Georgia, serif;
+  text-align: center;
+}
+
+.card {
+  width: 100%;
+  max-width: 430px;
+  padding: 30px 22px;
+  border: 1px solid #e879b46b;
+  border-radius: 26px;
+  background: #160e20dc;
+  box-shadow: 0 0 35px #ff54b41c;
+  position: relative;
+  z-index: 2;
+}
+
+h1 {
+  color: #ffc0e2;
+  font-size: clamp(27px, 7vw, 36px);
+  text-shadow: 0 0 20px #ff4ca8;
+}
+
+p {
+  color: #f5dcec;
+  line-height: 1.9;
+}
+
+button {
+  padding: 13px 22px;
+  margin: 8px 3px;
+  border-radius: 28px;
+  border: 1px solid #ffb0dd;
+  background: linear-gradient(110deg, #a52e79, #6740a0);
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+button:active { transform: scale(.97); }
+
+#letter { display: none; }
+
+#typed {
+  min-height: 155px;
+  white-space: pre-line;
+  font-size: 17px;
+  color: #ffe1f1;
+  line-height: 2;
+}
+
+.cursor {
+  display: inline-block;
+  color: #ff91cb;
+  animation: blink .7s infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+#heartSection {
+  display: none;
+  animation: fadeIn 1.4s ease;
+}
+
+.heart {
+  width: 150px;
+  height: 150px;
+  margin: 10px auto;
+  filter: drop-shadow(0 0 13px #ff398d);
+  overflow: visible;
+}
+
+.heart path {
+  fill: none;
+  stroke: #ff77bd;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 500;
+  stroke-dashoffset: 500;
+  animation: drawHeart 3s ease forwards;
+}
+
+@keyframes drawHeart {
+  to { stroke-dashoffset: 0; }
+}
+
+#finalMessage {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 1.5s, transform 1.5s;
+}
+
+#finalMessage.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#finalMessage h2 {
+  color: #ffb9df;
+}
+
+#startScreen { display: block; }
+
+.floating {
+  position: fixed;
+  bottom: -35px;
+  color: #ff8dc9;
+  pointer-events: none;
+  z-index: 1;
+  animation: floatUp linear forwards;
+}
+
+@keyframes floatUp {
+  to {
+    transform: translateY(-110vh) rotate(35deg);
+    opacity: 0;
+  }
+}
+
+.note {
+  color: #c8aacb;
+  font-size: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <section id="startScreen">
+    <div style="font-size:42px">💌</div>
+    <h1>For You, My Love</h1>
+    <p>
+      I made a little something for you.<br>
+      Take a moment, baby. This is just for you. ❤️
+    </p>
+    <button onclick="beginLove()">Open your letter 💗</button>
+  </section>
+
+  <section id="letter">
+    <h1>My Love ❤️</h1>
+    <p id="typed"></p>
+    <span class="cursor" id="cursor">♥</span>
+
+    <div id="heartSection">
+      <svg class="heart" viewBox="0 0 100 100"
+           xmlns="http://www.w3.org/2000/svg"
+           aria-label="A heart being drawn">
+        <path d="M50 86
+                 C42 77 9 56 9 32
+                 C9 5 39 3 50 25
+                 C61 3 91 5 91 32
+                 C91 56 58 77 50 86 Z"/>
+      </svg>
+
+      <div id="finalMessage">
+        <h2>I'll always love you, baby. ❤️</h2>
+        <p>
+          No matter what kind of day you're having,
+          and no matter whether things are easy or difficult,
+          you deserve love, kindness, and happiness.
+        </p>
+        <p>
+          You don't have to be perfect to be loved.
+          I love you for being you, and I'm grateful
+          that you're part of my life. 💗
+        </p>
+        <p>Always remember that, my love. 🌷</p>
+      </div>
+    </div>
+
+    <button id="replay" style="display:none" onclick="replayLove()">
+      Read it again 💌
+    </button>
+  </section>
+
+  <button id="musicButton" onclick="toggleMusic()">
+    ♫ Play my song
+  </button>
+
+  <p class="note" id="musicNote">
+    A little melody for you 🎵
+  </p>
+
+</div>
+
+<!-- Put your song file in the same folder as this HTML file.
+     Name it song.mp3, or change the filename below. -->
+<audio id="mySong" src="song.mp3" loop preload="none"></audio>
+
+<script>
+const message =
+`I love you, baby. ❤️
+
+I wish I could be there
+to give you the biggest hug
+and see that beautiful smile.
+
+Even when I don't know
+the perfect words to say,
+I hope my actions show you
+how much you mean to me. 💗`;
+
+let typingTimer;
+let heartTimer;
+let finished = false;
+
+function beginLove() {
+  document.getElementById("startScreen").style.display = "none";
+  document.getElementById("letter").style.display = "block";
+  document.getElementById("musicNote").textContent =
+    "This little moment is just for you. ❤️";
+
+  replayLove();
+}
+
+function replayLove() {
+  clearTimeout(typingTimer);
+  clearTimeout(heartTimer);
+  finished = false;
+
+  const typed = document.getElementById("typed");
+  const heartSection = document.getElementById("heartSection");
+  const finalMessage = document.getElementById("finalMessage");
+
+  typed.textContent = "";
+  heartSection.style.display = "none";
+  finalMessage.classList.remove("show");
+  document.getElementById("cursor").style.display = "inline-block";
+  document.getElementById("replay").style.display = "none";
+
+  let index = 0;
+
+  function typeNext() {
+    if (index < message.length) {
+      typed.textContent += message.charAt(index);
+      index++;
+      typingTimer = setTimeout(typeNext, 65);
+    } else {
+      document.getElementById("cursor").style.display = "none";
+      heartSection.style.display = "block";
+      makeFloatingHearts();
+
+      heartTimer = setTimeout(() => {
+        finalMessage.classList.add("show");
+        document.getElementById("replay").style.display = "inline-block";
+        finished = true;
+      }, 2800);
+    }
+  }
+
+  typeNext();
+}
+
+const song = document.getElementById("mySong");
+
+async function toggleMusic() {
+  const button = document.getElementById("musicButton");
+  const note = document.getElementById("musicNote");
+
+  if (!song.paused) {
+    song.pause();
+    button.textContent = "♫ Play my song";
+    return;
+  }
+
+  try {
+    await song.play();
+    button.textContent = "♫ Pause my song";
+    note.textContent = "Playing your song, my love. 🎵";
+  } catch (error) {
+    note.textContent =
+      "Add your song.mp3 file beside this HTML file first. ❤️";
+  }
+}
+
+song.addEventListener("pause", () => {
+  document.getElementById("musicButton").textContent = "♫ Play my song";
+});
+
+song.addEventListener("ended", () => {
+  document.getElementById("musicButton").textContent = "♫ Play my song";
+});
+
+function makeFloatingHearts() {
+  for (let i = 0; i < 18; i++) {
+    setTimeout(() => {
+      const heart = document.createElement("span");
+      heart.className = "floating";
+      heart.textContent = ["♡", "♥", "💗", "✨"][
+        Math.floor(Math.random() * 4)
+      ];
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = (16 + Math.random() * 17) + "px";
+      heart.style.animationDuration = (4 + Math.random() * 4) + "s";
+
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 8500);
+    }, i * 130);
+  }
+}
+</script>
+
+</body>
+</html>
